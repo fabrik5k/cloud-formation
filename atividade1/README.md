@@ -122,4 +122,34 @@ O objetivo deste projeto é fornecer uma base escalável, resiliente e observáv
 
 ---
 
-&copy; 2025 - Projeto de Infraestrutura AWS via CloudFormation
+## 8. Perguntas Reflexivas Respondidas
+
+- **Por que é importante que o nome do bucket seja globalmente único?**  
+  Porque o namespace do Amazon S3 é compartilhado por todas as contas e regiões. Um nome único evita colisões e garante que o endpoint `https://<bucket>.s3.amazonaws.com` aponte somente para o seu bucket.
+
+- **Qual a função da configuração de versionamento no bucket?**  
+  O versionamento mantém múltiplas revisões de cada objeto, permitindo restauração de arquivos excluídos ou sobrescritos acidentalmente e adicionando camada extra de proteção em pipelines IaC.
+
+- **Como você modificaria o template para adicionar uma política de ciclo de vida que exclua objetos após 30 dias?**  
+  No recurso `AWS::S3::Bucket`, incluir:
+  ```yaml
+  LifecycleConfiguration:
+    Rules:
+      - Id: ExpireAfter30Days
+        Status: Enabled
+        ExpirationInDays: 30
+        Prefix: ""
+  ```
+
+- **Quais são as vantagens de usar nested stacks?**  
+  Facilita a modularidade, reutilização de código, clareza na manutenção e possibilita atualizações isoladas de partes da infraestrutura.
+
+- **Como os outputs de uma nested stack são referenciados na stack principal?**  
+  Utilizando `!GetAtt <NestedStack>.Outputs.<OutputName>` ou, quando exportados, `!ImportValue <ExportName>`.
+
+- **Como você modificaria a estrutura para adicionar mais componentes, como um balanceador de carga ou um banco de dados?**  
+  Adicionaria um novo arquivo nested (por exemplo `database.yaml`) com o recurso, faria upload ao S3 e referenciaria na stack principal com um novo `AWS::CloudFormation::Stack`. Em seguida, passaria os parâmetros necessários e consumiria os outputs via `!GetAtt`.
+
+---
+
+© 2025 - Projeto de Infraestrutura AWS via CloudFormation
