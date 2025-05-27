@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Nested stack: Security Groups'
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  Environment:
+    Type: String
+
+Resources:
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Allow HTTP to web servers'
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: '0.0.0.0/0'
+      Tags:
+        - Key: Name
+          Value: !Sub '${Environment}-web-sg'
+
+Outputs:
+  WebServerSecurityGroupId:
+    Value: !Ref WebServerSecurityGroup
+    Export:
+      Name: !Sub '${AWS::StackName}-WebServerSecurityGroupId'
