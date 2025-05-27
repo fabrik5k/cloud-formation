@@ -87,7 +87,7 @@ lifecycle_rule {
     days = 30
   }
 }
-```                                                                                                                                            |
+```                                                                                                                                            
 
 ### 🌐 Seção 2 – VPC / AZ / NAT
 
