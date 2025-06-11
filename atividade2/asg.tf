@@ -18,7 +18,8 @@ resource "aws_launch_template" "web" {
     systemctl start httpd
     systemctl enable httpd
     echo "<h1>Servidor Web em ambiente ${var.environment}</h1>" > /var/www/html/index.html
-  EOF)
+    EOF
+    )
 
   tag_specifications {
     resource_type = "instance"
